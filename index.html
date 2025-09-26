@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>迷いの森</title>
+  <style>
+    :root { --bg:#f7f2e9; --ink:#222; --muted:#555; --accent:#d33; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic', 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .frame {
+      width: min(920px, 92vw);
+      background: #fffdf7cc;
+      padding: clamp(12px, 4vw, 32px);
+    }
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+    .score { font-size: clamp(16px, 2.5vw, 22px); }
+    .timer { font-size: clamp(16px, 2.5vw, 22px); text-align: right; }
+    .title {
+      place-self: center;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      padding: 8px 18px;
+      background: #5b5da8;
+      color: #e8c6ff;
+      border-radius: 6px;
+      box-shadow: 0 4px 0 rgba(0,0,0,.1);
+      font-size: clamp(22px, 4.2vw, 40px);
+    }
+    .lead {
+      text-align: center;
+      margin: 24px 0;
+      line-height: 1.9;
+      color: var(--muted);
+      font-size: clamp(14px, 2.7vw, 20px);
+    }
+    .scene {
+      display: block;
+      width: 100%;
+      max-height: min(62vh, 560px);
+      object-fit: contain;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.15);
+      background: #eee;
+    }
+    .cta {
+      display: block;
+      margin: 24px auto 0;
+      padding: 12px 28px;
+      font-size: clamp(16px, 3.2vw, 22px);
+      font-weight: 700;
+      border: 2px solid #333;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      transition: transform .04s ease, box-shadow .12s ease;
+    }
+    .cta:active { transform: translateY(1px); }
+    footer {
+      text-align: center;
+      color: #999;
+      margin-top: 14px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <main class="frame" role="main">
+    <header>
+      <div class="score"><span id="score">0</span> ポイント</div>
+      <div class="title">迷いの森</div>
+      <div class="timer">残り<span id="sec">60</span>秒</div>
+    </header>
+
+    <div class="lead">
+      お宝がたくさんあるらしい<br>
+      だが、帰って来ることも考えよう！
+    </div>
+
+    <img class="scene" src="./IMG_0629.jpeg" alt="迷いの森の入口">
+
+    <button id="enter" class="cta" type="button">入る！</button>
+
+    <footer>© 2025 Maze Forest</footer>
+  </main>
+
+  <script>
+    // とりあえず最小限の動作だけ
+    document.getElementById('enter').addEventListener('click', () => {
+      alert('まだ準備中。次の画面をこれから作っていこう！');
+    });
+  </script>
+</body>
+</html>
