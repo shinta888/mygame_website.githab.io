@@ -21,10 +21,10 @@ function randomScene(){
   if (Math.random() < 0.8) {        // 80%
     const dir = Math.random() < 0.5 ? 'left' : 'right';
     const idx = Math.floor(Math.random()*32)+1; // 1..32
-    return `${dir}${idx}.jpg`;
+    return `images/${dir}${idx}.jpg`;
   } else {                          // 20%
     const idx = Math.floor(Math.random()*16)+1; // 1..16
-    return `forward${idx}.jpg`;
+    return `images/forward${idx}.jpg`;
   }
 }
 
