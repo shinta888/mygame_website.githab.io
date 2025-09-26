@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>迷いの森</title>
+<title>迷いの森 - 探索</title>
 <style>:root{--bg:#f7f2e9;--ink:#222;--muted:#555;--accent:#d33}
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -25,9 +25,14 @@ footer{text-align:center;color:#999;margin-top:14px;font-size:12px}
     <div class="title">迷いの森</div>
     <div class="timer">残り<span id="sec">60</span>秒</div>
   </header>
-  <div class="lead">お宝がたくさんあるらしい<br>だが、帰って来ることも考えよう！</div>
-  <img class="scene" src="./IMG_0629.jpeg" alt="迷いの森の入口">
-  <div class="row"><a class="btn" href="./game.html">入る！</a></div>
+  <div class="lead" id="lead">お宝発見！！<br>だが、まだまだありそうだ<br>矢印の方向に進みますか？</div>
+  <img id="scene" class="scene" src="./IMG_0630.jpeg" alt="場面">
+  <div class="row">
+    <button id="go" class="btn">進む！</button>
+    <button id="back" class="btn">いや、引き返す</button>
+  </div>
+  <p class="warn">※ 画像ファイルは left1..32.jpg / right1..32.jpg / forward1..16.jpg を同フォルダに置いてください。</p>
   <footer>© 2025 Maze Forest</footer>
 </main>
+<script src="./game.js"></script>
 </body></html>
