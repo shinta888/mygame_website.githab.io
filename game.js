@@ -79,9 +79,18 @@ function showRandomSceneAndScore(){
   const pick = randomScene();
   sceneEl.src = pick.file;
   history.push(pick.meta);
+
+  // 宝箱判定
   const add = chestPointsByFilename(pick.file);
-  if(add>0){ score += add; scoreEl.textContent = String(score); }
+  if(add>0){
+    score += add;
+    scoreEl.textContent = String(score);
+    leadEl.innerHTML = 'お宝発見！！<br>だが、まだまだありそうだ';
+  } else {
+    leadEl.textContent = 'この先にお宝の匂い！！';
+  }
 }
+
 
 // ---- 帰り道 ----
 let backIndex = -1;
