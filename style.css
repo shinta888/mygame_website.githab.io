@@ -84,5 +84,9 @@ header{
   font-weight: 700;
   cursor: pointer;
 }
-.btn:active{ transform: translateY(1px); }
+.btn:active{ 
+  transform: translateY(1px);
+  text-decoration: none;  
+}
+
 
