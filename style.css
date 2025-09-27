@@ -12,9 +12,17 @@ body {
   justify-content: center;
 }
 
+/* まずは横スクロールを物理的に禁止 */
+html, body { overflow-x: hidden; }
+
+/* 余白を幅に含める */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
 /* 枠 */
 .frame{
-  width: min(920px, 92vw);
+  width: min(920px, 100%);
   background: #fffdf7cc;
   padding: clamp(12px, 4vw, 32px);
 }
@@ -77,3 +85,4 @@ header{
   cursor: pointer;
 }
 .btn:active{ transform: translateY(1px); }
+
