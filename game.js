@@ -95,7 +95,21 @@ function showRandomSceneAndScore(){
 // ---- 帰り道 ----
 let backIndex = -1;
 function startReturnMode(){
-  if (history.length===0) return;
+  // いま目の前の分岐（最後に表示したシーン）は出題しない
+  if (history.length === 0) {
+  // そもそも進んでいないなら、もう入口＝ゴール扱いでOK
+  clearInterval(timer);
+  showGoalThenResult();
+  return;
+  }
+  history.pop(); // ★ ここがポイント：最後の分岐を除外
+
+  if (history.length === 0) {
+  // 1歩だけ進んで引き返した場合は、残りはもう入り口
+  clearInterval(timer);
+  showGoalThenResult();
+  return;
+  }
   mode = 'return';
   backIndex = history.length - 1;
   askAtCurrentBackStep();
