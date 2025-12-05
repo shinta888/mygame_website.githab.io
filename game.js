@@ -1,4 +1,49 @@
 let score = 0;
+// ---- 画像プリロード用 ----
+const imageCache = {};
+const preloadUrls = [];
+
+// 探索用画像（進行）
+for (let i = 1; i <= 32; i++) {
+  preloadUrls.push(`images/left${i}.jpg`);
+  preloadUrls.push(`images/right${i}.jpg`);
+}
+for (let i = 1; i <= 16; i++) {
+  preloadUrls.push(`images/forward${i}.jpg`);
+}
+
+// 帰り道用画像（images2/turning a..h 1..4）
+const letters = ['a','b','c','d','e','f','g','h'];
+for (const l of letters) {
+  for (let k = 1; k <= 4; k++) {
+    preloadUrls.push(`images2/turning${l}${k}.jpg`);
+  }
+}
+
+// 特殊画像
+preloadUrls.push('images/start.jpeg');
+preloadUrls.push('images/goal.jpeg');
+preloadUrls.push('images/mayotta.jpeg');
+
+// 実際にプリロード
+preloadUrls.forEach(url => {
+  const img = new Image();
+  img.onload = () => {
+    imageCache[url] = img;
+  };
+  img.src = url;
+});
+
+// 表示用のヘルパー
+function setScene(src) {
+  if (imageCache[src]) {
+    // すでに読み込んでいれば即表示
+    sceneEl.src = imageCache[src].src;
+  } else {
+    // まだなら普通に読み込む（1回目だけ少し待ち）
+    sceneEl.src = src;
+  }
+}
 let timeLeft = 60;
 const scoreEl = document.getElementById('score');
 const secEl = document.getElementById('sec');
