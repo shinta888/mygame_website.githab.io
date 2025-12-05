@@ -94,26 +94,32 @@ function showRandomSceneAndScore(){
 
 // ---- 帰り道 ----
 let backIndex = -1;
-function startReturnMode(){
-  // いま目の前の分岐（最後に表示したシーン）は出題しない
-  if (history.length === 0) {
-  // そもそも進んでいないなら、もう入口＝ゴール扱いでOK
-  clearInterval(timer);
-  showGoalThenResult();
-  return;
-  }
-  history.pop(); // ★ ここがポイント：最後の分岐を除外
+function startReturnMode() {
 
+  // 分岐が1度も出ていない → 入口なので即ゴール
   if (history.length === 0) {
-  // 1歩だけ進んで引き返した場合は、残りはもう入り口
-  clearInterval(timer);
-  showGoalThenResult();
-  return;
+    clearInterval(timer);
+    showGoalThenResult();
+    return;
   }
-  mode = 'return';
+
+  // ★ 最後に表示された分岐点は進んでいないので削除
+  history.pop();
+
+  // 一歩だけ進んで引き返した場合 → 残りの履歴が空になる
+  if (history.length === 0) {
+    clearInterval(timer);
+    showGoalThenResult();
+    return;
+  }
+
+  // ★ ここからが真の帰路
+  mode = "return";
   backIndex = history.length - 1;
+
   askAtCurrentBackStep();
 }
+
 
 function askAtCurrentBackStep(){
   const step = history[backIndex];
