@@ -1,4 +1,52 @@
 let score = 0;
+// ---- ランキング関連 ----
+// localStorage に保存するキー名
+const RANKING_KEY = 'mazeRanking';
+
+// ランキングを取得（配列）
+function loadRanking(){
+  try {
+    const raw = localStorage.getItem(RANKING_KEY);
+    if(!raw) return [];
+    return JSON.parse(raw);
+  } catch(e){
+    return [];
+  }
+}
+
+// ランキングを保存
+function saveRanking(list){
+  localStorage.setItem(RANKING_KEY, JSON.stringify(list));
+}
+
+// スコアをランキングに反映（必要なら名前入力）
+function updateRankingWithScore(finalScore){
+  if (finalScore <= 0) return;  // 0点はランキングに載せない
+
+  let ranking = loadRanking();  // [{name, score}, ...]
+
+  // まだ10人未満 or 自分のスコアが最下位より高いならエントリー
+  const needEntry =
+    ranking.length < 10 ||
+    finalScore > ranking[ranking.length - 1].score;
+
+  if (!needEntry) return;
+
+  let name = window.prompt(
+    'ランキングに載りました！\n名前を入力してください（10文字まで）',
+    ''
+  );
+  if (!name) return;
+
+  name = name.trim().slice(0, 10); // 最大10文字
+
+  ranking.push({ name, score: finalScore });
+  ranking.sort((a, b) => b.score - a.score); // スコア降順
+  ranking = ranking.slice(0, 10); // 上位10件に絞る
+
+  saveRanking(ranking);
+}
+
 // ---- 画像プリロード用 ----
 const imageCache = {};
 const preloadUrls = [];
@@ -226,13 +274,22 @@ function showLostThenGameOver(){
 }
 
 function showResult(finalScore){
+  // まずランキング更新
+  updateRankingWithScore(finalScore);
+
+  // そのあとリザルト画面を表示
   document.body.innerHTML = `
     <main class="frame" style="text-align:center">
       <h1>Congratulations!!</h1>
-      <div style="font-size:48px"><span style="color:red;font-weight:800">${finalScore}</span> ポイント ゲット！！</div>
-      <div class="row" style="margin-top:32px"><a class="btn" href="./index.html">戻る</a></div>
+      <div style="font-size:48px">
+        <span style="color:red;font-weight:800">${finalScore}</span> ポイント ゲット！！
+      </div>
+      <div class="row" style="margin-top:32px">
+        <a class="btn" href="./index.html">戻る</a>
+      </div>
     </main>`;
 }
+
 
 function showGameOver(finalScore){
   document.body.innerHTML = `
