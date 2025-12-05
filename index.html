@@ -5,6 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>迷いの森</title>
   <style>
+    .ranking{
+      margin-top: 24px;
+      font-size: 14px;
+      color: #333;
+      text-align: left;   /* 左寄せ */
+}
+    .ranking h2{
+      margin: 0 0 8px;
+      font-size: 16px;
+}
+    .ranking ol{
+      margin: 0;
+      padding-left: 1.5em;
+}
+    .ranking li{
+      line-height: 1.6;
+}
+
     :root{--bg:#f7f2e9;--ink:#222;--muted:#555;--accent:#d33}
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -38,7 +56,44 @@
     </header>
     <div class="lead">お宝がたくさんあるらしい<br>だが、帰って来ることも考えよう！</div>
     <img class="scene" src="./images/start.jpg" alt="迷いの森の入口">
-    <div class="row"><a class="btn" href="./game.html">入る！</a></div>
+        <div class="row"><a class="btn" href="./game.html">入る！</a></div>
+
+    <!-- ▼ ランキング表示エリア ▼ -->
+    <div class="ranking">
+      <h2>ランキング</h2>
+      <ol id="ranking-list"></ol>
+    </div>
+    <!-- ▲ ランキング表示エリア ▲ -->
+
+      <script>
+    (function(){
+      const listEl = document.getElementById('ranking-list');
+      if (!listEl) return;
+
+      let ranking = [];
+      try {
+        const raw = localStorage.getItem('mazeRanking');
+        if (raw) ranking = JSON.parse(raw);
+      } catch(e){
+        ranking = [];
+      }
+
+      ranking.forEach((r, i) => {
+        const li = document.createElement('li');
+        const name = r.name || '？？？';
+        li.textContent = `${i+1}位：${name} … ${r.score} pt`;
+        listEl.appendChild(li);
+      });
+
+      if (ranking.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'まだ記録はありません';
+        listEl.appendChild(li);
+      }
+    })();
+  </script>
+
+
   </main>
 </body>
 </html>
