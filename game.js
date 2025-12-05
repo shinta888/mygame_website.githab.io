@@ -122,7 +122,7 @@ function chestPointsByFilename(name){
 function showRandomSceneAndScore(){
   if(timeLeft<=0 || mode!=='explore') return;
   const pick = randomScene();
-  sceneEl.src = pick.file;
+  setScene(pick.file);
   history.push(pick.meta);
 
   // 宝箱判定
@@ -170,12 +170,13 @@ function askAtCurrentBackStep(){
   const step = history[backIndex];
   const turnImg = turningImageFor(step.idx);
   leadEl.textContent = step.kind==='two' ? 'どっちから来た？' : 'どの道から来た？';
-  sceneEl.src = turnImg;
+  setScene(turnImg);
   let correct = step.dir;
   if (step.dir==='left') correct = 'right';
   else if (step.dir==='right') correct = 'left';
   renderReturnControls(step.kind, correct);
 }
+
 
 function checkReturnAnswer(choice, correct){
   if (choice === correct){
@@ -212,14 +213,14 @@ function turningImageFor(idx){
 // ---- エンディング ----
 function showGoalThenResult(){
   leadEl.textContent = '出口だ！！';
-  sceneEl.src = 'images/goal.jpeg';
+  setScene('images/goal.jpeg');
   controls.innerHTML='';
   setTimeout(()=> showResult(score), 3000);
 }
 
 function showLostThenGameOver(){
   leadEl.textContent = '迷った！！';
-  sceneEl.src = 'images/mayotta.jpeg';
+  setScene('images/mayotta.jpeg');
   controls.innerHTML='';
   setTimeout(()=> showGameOver(0), 3000);
 }
