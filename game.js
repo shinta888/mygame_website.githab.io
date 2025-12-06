@@ -310,13 +310,18 @@ function showLostThenGameOver(){
 }
 
 async function showResult(finalScore){
-  // 名前入力（ランキング用）
   const name = prompt("ランキング登録！名前を入力してください（10文字まで）");
-  if (name && finalScore > 0) {
-    await saveScoreToServer(name.slice(0,10), finalScore);
+
+  if (name && finalScore > 0 && window.firebaseDB) {
+    try {
+      await saveScoreToServer(name.slice(0,10), finalScore);
+    } catch (e) {
+      console.error("ランキング保存に失敗:", e);
+      alert("ランキング保存に失敗しましたが、ゲーム結果は表示します。");
+    }
   }
 
-  // リザルト画面へ
+  // ★ ここは try/catch の外：必ずリザルト画面に行く
   document.body.innerHTML = `
     <main class="frame" style="text-align:center">
       <h1>Congratulations!!</h1>
