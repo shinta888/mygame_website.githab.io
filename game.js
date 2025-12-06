@@ -1,4 +1,40 @@
 let score = 0;
+// ---- Firebase ランキング関連 ----
+import {
+  ref, push, query, limitToLast, orderByChild, get
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+// ランキングにスコアを追加
+async function saveScoreToServer(name, score){
+  const db = window.firebaseDB;
+  const rankRef = ref(db, "ranking");
+
+  await push(rankRef, {
+    name: name,
+    score: score,
+    time: Date.now()
+  });
+}
+
+// ランキング上位10件を取得
+async function loadRankingFromServer(){
+  const db = window.firebaseDB;
+
+  const q = query(
+    ref(db, "ranking"),
+    orderByChild("score"),
+    limitToLast(10)
+  );
+
+  const snapshot = await get(q);
+
+  const list = [];
+  snapshot.forEach(child => list.push(child.val()));
+
+  // limitToLast は昇順なので逆順で返す
+  return list.reverse();
+}
+
 // ---- ランキング関連 ----
 // localStorage に保存するキー名
 const RANKING_KEY = 'mazeRanking';
@@ -273,11 +309,14 @@ function showLostThenGameOver(){
   setTimeout(()=> showGameOver(0), 3000);
 }
 
-function showResult(finalScore){
-  // まずランキング更新
-  updateRankingWithScore(finalScore);
+async function showResult(finalScore){
+  // 名前入力（ランキング用）
+  const name = prompt("ランキング登録！名前を入力してください（10文字まで）");
+  if (name && finalScore > 0) {
+    await saveScoreToServer(name.slice(0,10), finalScore);
+  }
 
-  // そのあとリザルト画面を表示
+  // リザルト画面へ
   document.body.innerHTML = `
     <main class="frame" style="text-align:center">
       <h1>Congratulations!!</h1>
