@@ -1,5 +1,29 @@
 <!DOCTYPE html>
 <html lang="ja">
+<!-- Firebase (モジュール版) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyBbdkGsWniVFjBj9iAa3KzP1psUDSb4rho",
+  authDomain: "shintarogame-c7f21.firebaseapp.com",
+  databaseURL: "https://shintarogame-c7f21-default-rtdb.firebaseio.com", ←これが必要
+  projectId: "shintarogame-c7f21",
+  storageBucket: "shintarogame-c7f21.appspot.com",
+  messagingSenderId: "459244112734",
+  appId: "1:459244112734:web:e3f6ee815b3e34950dddcf",
+  measurementId: "G-19MHW7VT6K"
+};
+
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // game.js でも使えるように global 化
+  window.firebaseDB = db;
+</script>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
