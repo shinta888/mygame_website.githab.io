@@ -81,6 +81,7 @@
     <div class="lead">お宝がたくさんあるらしい<br>だが、帰って来ることも考えよう！</div>
     <img class="scene" src="./images/start.jpg" alt="迷いの森の入口">
         <div class="row"><a class="btn" href="./game.html">入る！</a></div>
+    
 
     <!-- ▼ ランキング表示エリア ▼ -->
     <div class="ranking">
@@ -89,33 +90,42 @@
     </div>
     <!-- ▲ ランキング表示エリア ▲ -->
 
-      <script>
-    (function(){
-      const listEl = document.getElementById('ranking-list');
-      if (!listEl) return;
+<script type="module">
+  import { ref, query, orderByChild, limitToLast, get }
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-      let ranking = [];
-      try {
-        const raw = localStorage.getItem('mazeRanking');
-        if (raw) ranking = JSON.parse(raw);
-      } catch(e){
-        ranking = [];
-      }
+  async function loadRanking(){
+    const db = window.firebaseDB;
 
-      ranking.forEach((r, i) => {
-        const li = document.createElement('li');
-        const name = r.name || '？？？';
-        li.textContent = `${i+1}位：${name} … ${r.score} pt`;
-        listEl.appendChild(li);
-      });
+    const q = query(
+      ref(db, "ranking"),
+      orderByChild("score"),
+      limitToLast(10)
+    );
 
-      if (ranking.length === 0) {
-        const li = document.createElement('li');
-        li.textContent = 'まだ記録はありません';
-        listEl.appendChild(li);
-      }
-    })();
-  </script>
+    const snapshot = await get(q);
+
+    const list = [];
+    snapshot.forEach(child => list.push(child.val()));
+    return list.reverse();
+  }
+
+  loadRanking().then(rank => {
+    const ul = document.getElementById("ranking-list");
+    if (!ul) return;
+
+    rank.forEach((r, i) => {
+      const li = document.createElement("li");
+      li.textContent = `${i+1}位： ${r.name} … ${r.score} pt`;
+      ul.appendChild(li);
+    });
+
+    if (rank.length === 0){
+      ul.innerHTML = "<li>まだ記録がありません</li>";
+    }
+  });
+</script>
+
 
 
   </main>
