@@ -260,7 +260,7 @@ function showLostThenGameOver(){
   setTimeout(()=> showGameOver(0), 3000);
 }
 
-async function showResult(finalScore){
+function showResult(finalScore){
   let name = null;
 
   if (finalScore > 0) {
@@ -268,16 +268,14 @@ async function showResult(finalScore){
     if (name) {
       name = name.trim().slice(0,10);
       if (name) {
-        try {
-          await saveScoreToServer(name, finalScore);
-        } catch (e) {
+        // ランキング保存は「待たずに」投げるだけ
+        saveScoreToServer(name, finalScore).catch(e => {
           console.error("ランキング保存に失敗:", e);
-          alert("ランキング保存に失敗しましたが、ゲーム結果は表示します。");
-        }
+          // 失敗しても画面遷移はもう終わっているので OK
+        });
       }
     }
   }
-
   document.body.innerHTML = `
     <main class="frame" style="text-align:center">
       <h1>Congratulations!!</h1>
