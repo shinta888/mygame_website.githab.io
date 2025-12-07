@@ -1,5 +1,8 @@
-/* 画面の基本レイアウト */
+/* style.css */
+
+/* 画面の基本レイアウト ------------------------------------ */
 html, body { height: 100%; }
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -12,7 +15,7 @@ body {
   justify-content: center;
 }
 
-/* まずは横スクロールを物理的に禁止 */
+/* 横スクロールを禁止 */
 html, body { overflow-x: hidden; }
 
 /* 余白を幅に含める */
@@ -20,14 +23,14 @@ html, body { overflow-x: hidden; }
 *::before,
 *::after { box-sizing: border-box; }
 
-/* 枠 */
+/* 枠 ------------------------------------------------------ */
 .frame{
   width: min(920px, 100%);
   background: #fffdf7cc;
   padding: clamp(12px, 4vw, 32px);
 }
 
-/* ヘッダー：左=スコア、中央=タイトル、右=タイマー */
+/* ヘッダー：左=スコア、中央=タイトル、右=タイマー -------- */
 header{
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -45,7 +48,7 @@ header{
   border-radius: 6px;
 }
 
-/* 説明文 */
+/* 説明文 --------------------------------------------------- */
 .lead{
   text-align: center;
   margin: 24px 0 12px;
@@ -54,7 +57,7 @@ header{
   font-size: 18px;
 }
 
-/* 分岐点の画像：大きすぎる時は縮小、小さい時はそのまま */
+/* 分岐点の画像 --------------------------------------------- */
 .scene{
   display: block;
   width: auto !important;
@@ -68,7 +71,7 @@ header{
   box-shadow: 0 8px 24px rgba(0,0,0,.12);
 }
 
-/* ボタン行 */
+/* ボタン行 ------------------------------------------------- */
 .row{
   display: flex;
   gap: 20px;
@@ -84,9 +87,26 @@ header{
   font-weight: 700;
   cursor: pointer;
 }
-.btn:active{ 
+.btn:active{
   transform: translateY(1px);
-  text-decoration: none;  
+  text-decoration: none;
 }
 
-
+/* ランキング表示（タイトル画面用） ------------------------- */
+.ranking{
+  margin-top: 24px;
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+}
+.ranking h2{
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.ranking ol{
+  margin: 0;
+  padding-left: 1.5em;
+}
+.ranking li{
+  line-height: 1.6;
+}
