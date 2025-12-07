@@ -1,3 +1,4 @@
+<!-- game.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -5,25 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>迷いの森 - 探索</title>
   <link rel="stylesheet" href="style.css">
-  
-  <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBbdkGsWniVFjBj9iAa3KzP1psUDSb4rho",
-    authDomain: "shintarogame-c7f21.firebaseapp.com",
-    databaseURL: "https://shintarogame-c7f21-default-rtdb.firebaseio.com",
-    projectId: "shintarogame-c7f21",
-    storageBucket: "shintarogame-c7f21.appspot.com",
-    messagingSenderId: "459244112734",
-    appId: "1:459244112734:web:e3f6ee815b3e34950dddcf"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  window.firebaseDB = getDatabase(app);
-</script>
-
 </head>
 <body>
   <main class="frame">
@@ -32,13 +14,16 @@
       <div class="title">迷いの森</div>
       <div class="timer">残り<span id="sec">60</span>秒</div>
     </header>
-    <div class="lead" id="lead">お宝発見！！<br>だが、まだまだありそうだ</div>
+    <div class="lead" id="lead">
+      お宝発見！！<br>だが、まだまだありそうだ
+    </div>
     <img id="scene" class="scene" src="./images/start.jpeg" alt="場面">
     <div id="controls" class="row">
-      <button id="go" class="btn">進む！</button>
-      <button id="back" class="btn">いや、引き返す</button>
+      <!-- JS 側でボタンを差し替える -->
     </div>
   </main>
+
+  <!-- ゲームロジック（ESモジュール） -->
   <script type="module" src="./game.js"></script>
 </body>
 </html>
