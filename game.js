@@ -11,7 +11,7 @@ import {
 const firebaseConfig = {
   apiKey: "AIzaSyBbdkGsWniVFjBj9iAa3KzP1psUDSb4rho",
   authDomain: "shintarogame-c7f21.firebaseapp.com",
-  databaseURL: "https://shintarogame-c7f21-default-rtdb.firebaseio.com",
+  databaseURL:"https://shintarogame-c7f21-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "shintarogame-c7f21",
   storageBucket: "shintarogame-c7f21.appspot.com",
   messagingSenderId: "459244112734",
