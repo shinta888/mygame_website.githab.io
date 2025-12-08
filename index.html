@@ -40,17 +40,14 @@
     import {
       getDatabase,
       ref,
-      query,
-      orderByChild,
-      limitToLast,
       get
     } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // あなたの Firebase 設定
+    // Firebase 設定
     const firebaseConfig = {
       apiKey: "AIzaSyBbdkGsWniVFjBj9iAa3KzP1psUDSb4rho",
       authDomain: "shintarogame-c7f21.firebaseapp.com",
-      databaseURL:"https://shintarogame-c7f21-default-rtdb.asia-southeast1.firebasedatabase.app",
+      databaseURL: "https://shintarogame-c7f21-default-rtdb.asia-southeast1.firebasedatabase.app",
       projectId: "shintarogame-c7f21",
       storageBucket: "shintarogame-c7f21.appspot.com",
       messagingSenderId: "459244112734",
@@ -61,43 +58,49 @@
     const app = initializeApp(firebaseConfig);
     const db  = getDatabase(app);
 
-    // ランキング読み込み
+    // ランキング読み込み（全部取って JS でソート）
     async function loadRanking() {
-      const q = query(
-        ref(db, "ranking"),
-        orderByChild("score"),
-        limitToLast(10)
-      );
-
-      const snapshot = await get(q);
+      const snapshot = await get(ref(db, "ranking"));
       const list = [];
-      snapshot.forEach(child => list.push(child.val()));
 
-      // スコア昇順 → 降順に並べ直す
-      return list.reverse();
+      snapshot.forEach(child => {
+        const v = child.val(); // { name, score, time }
+        list.push(v);
+      });
+
+      // スコア降順、同点なら time 昇順
+      list.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.time - b.time;
+      });
+
+      return list.slice(0, 10); // 上位10件
     }
 
-    loadRanking().then(rank => {
-      const ol = document.getElementById("ranking-list");
-      if (!ol) return;
+    loadRanking()
+      .then(rank => {
+        const ol = document.getElementById("ranking-list");
+        if (!ol) return;
 
-      if (rank.length === 0) {
-        ol.innerHTML = "<li>まだ記録がありません</li>";
-        return;
-      }
+        if (rank.length === 0) {
+          ol.innerHTML = "<li>まだ記録がありません</li>";
+          return;
+        }
 
-      rank.forEach((r, i) => {
-        const li = document.createElement("li");
-        li.textContent = `${i + 1}位： ${r.name} … ${r.score} pt`;
-        ol.appendChild(li);
+        ol.innerHTML = "";
+        rank.forEach((r, i) => {
+          const li = document.createElement("li");
+          li.textContent = `${i + 1}位： ${r.name} … ${r.score} pt`;
+          ol.appendChild(li);
+        });
+      })
+      .catch(err => {
+        console.error("ランキングの取得に失敗:", err);
+        const ol = document.getElementById("ranking-list");
+        if (ol) {
+          ol.innerHTML = "<li>ランキングの読み込みに失敗しました</li>";
+        }
       });
-    }).catch(err => {
-      console.error("ランキングの取得に失敗:", err);
-      const ol = document.getElementById("ranking-list");
-      if (ol) {
-        ol.innerHTML = "<li>ランキングの読み込みに失敗しました</li>";
-      }
-    });
   </script>
 </body>
 </html>
