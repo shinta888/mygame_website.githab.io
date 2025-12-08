@@ -62,11 +62,10 @@
     const app = initializeApp(firebaseConfig);
     const db  = getDatabase(app);
 
-    // ランキング読み込み
     async function loadRanking() {
       const snapshot = await get(ref(db, "ranking"));
       const list = [];
-      snapshot.forEach(child => list.push(child.val()));  // ← ここを snapshot に修正
+      snapshot.forEach(child => list.push(child.val()));
 
       // score 降順, 同点は time 昇順
       list.sort((a,b) => {
