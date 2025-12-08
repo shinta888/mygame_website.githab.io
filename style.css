@@ -1,8 +1,5 @@
-/* 画面の基本レイアウト */
-html, body {
-  min-height: 100%;          /* 高さ固定ではなく「最低 100%」にする */
-}
-
+/* 画面レイアウト（前からのやつそのままでOK） */
+html, body { height: 100%; }
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -10,122 +7,55 @@ body {
                "Helvetica Neue", Arial, sans-serif;
   background: #f7f2e9;
   color: #222;
-  /* ★ 中央寄せの flex をやめる */
+  /* ここを flex ではなく block にしておくとページが普通にスクロールできる */
   display: block;
 }
 
-/* まずは横スクロールを物理的に禁止 */
-html, body { overflow-x: hidden; }
+/* ……中略（frame, header, .scene, .btn などは今のままでOK） …… */
 
-/* 余白を幅に含める */
-*,
-*::before,
-*::after { box-sizing: border-box; }
+/* ==== ランキングまわり ==== */
 
-/* 枠 */
-.frame{
-  width: min(920px, 100%);
-  background: #fffdf7cc;
-  padding: clamp(12px, 4vw, 32px);
-  margin: 24px auto 40px;    /* ★ 画面中央寄せ・上下に余白 */
-}
-
-/* ヘッダー：左=スコア、中央=タイトル、右=タイマー */
-header{
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-}
-.score{ font-size: 18px; }
-.timer{ font-size: 18px; text-align: right; }
-.title{
-  place-self: center;
-  font-weight: 800;
-  letter-spacing: .1em;
-  padding: 8px 18px;
-  background: #5b5da8;
-  color: #e8c6ff;
-  border-radius: 6px;
-}
-
-/* 説明文 */
-.lead{
-  text-align: center;
-  margin: 24px 0 12px;
-  line-height: 1.9;
-  color: #555;
-  font-size: 18px;
-}
-
-/* 分岐点の画像：大きすぎる時は縮小、小さい時はそのまま */
-.scene{
-  display: block;
-  width: auto !important;
-  height: auto;
-  max-width: 100%;
-  max-height: 60vh;
-  margin: 0 auto;
-  object-fit: contain;
-  border-radius: 6px;
-  background: #eee;
-  box-shadow: 0 8px 24px rgba(0,0,0,.12);
-}
-
-/* ボタン行 */
-.row{
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin-top: 20px;
-  flex-wrap: wrap;
-}
-.btn{
-  padding: 12px 24px;
-  border: 2px solid #333;
-  border-radius: 8px;
-  background: #fff;
-  font-weight: 700;
-  cursor: pointer;
-}
-.btn:active{
-  transform: translateY(1px);
-  text-decoration: none;
-}
-
-/* ▼ ランキングまわり ▼ */
-.ranking-toggle{
-  margin-top: 16px;
-  border: none;
-  background: transparent;
-  font-size: 16px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: #5b5da8;
-}
-.ranking-toggle .icon{
-  font-size: 20px;
-}
-
-.ranking{
-  margin-top: 16px;
+/* パネル本体：最初は非表示、open クラスが付いたら表示 */
+.ranking {
+  display: none;             /* ← これだけでOK。高さ固定しない */
+  margin-top: 24px;
   font-size: 14px;
   color: #333;
   text-align: left;
-  display: none;            /* デフォルト非表示 */
 }
-.ranking.open{
-  display: block;           /* ボタン押下で表示 */
+
+.ranking.open {
+  display: block;            /* ボタンを押したら block で全体が見える */
 }
-.ranking h2{
+
+.ranking h2 {
   margin: 0 0 8px;
   font-size: 16px;
 }
-.ranking ol{
+
+.ranking ol {
   margin: 0;
   padding-left: 1.5em;
 }
-.ranking li{
+
+.ranking li {
   line-height: 1.6;
+}
+
+/* 王冠ボタンの見た目（好きに調整してOK） */
+.ranking-toggle {
+  margin-top: 24px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: #4a46a8;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ranking-toggle .icon {
+  font-size: 18px;
 }
