@@ -162,11 +162,13 @@ header {
 
 .ranking ol {
   margin: 0;
-  padding-left: 1.5em;
+  padding-left: 0;
+  list-style: none;
 }
 
 .ranking li {
   line-height: 1.6;
 }
+
 
 
