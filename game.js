@@ -52,12 +52,7 @@ function updateStepBadge(){ //バッチカウント
     return;
   }
   stepBadge.style.display = 'flex';
-  const base = 0x2460; // ①
-  if (stepCount >= 1 && stepCount <= 20){
-    stepBadge.textContent = String.fromCharCode(base + stepCount - 1);
-  } else {
-    stepBadge.textContent = stepCount;
-  }
+  stepBadge.textContent = stepCount;
 }
 
 
