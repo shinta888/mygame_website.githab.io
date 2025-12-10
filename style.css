@@ -58,6 +58,31 @@ header {
   font-size: 18px;
 }
 
+.scene-wrap{
+  position: relative;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.step-badge{
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.6);
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  display: none;
+}
+
+
 /* 分岐点の画像 */
 .scene {
   display: block;
@@ -141,3 +166,4 @@ header {
 .ranking li {
   line-height: 1.6;
 }
+
