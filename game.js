@@ -56,7 +56,7 @@ function updateStepBadge(){ //バッチカウント
   if (stepCount >= 1 && stepCount <= 20){
     stepBadge.textContent = String.fromCharCode(base + stepCount - 1);
   } else {
-    stepBadge.textContent = String(stepCount);
+    stepBadge.textContent = stepCount;
   }
 }
 
