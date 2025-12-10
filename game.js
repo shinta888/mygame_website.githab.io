@@ -38,10 +38,28 @@ let timeLeft = 60;
 const scoreEl  = document.getElementById('score');
 const secEl    = document.getElementById('sec');
 const sceneEl  = document.getElementById('scene');
-const stepBadge = document.getElementById('step-badge'); //分岐点バッチ
-let stepCount = 0; 
 const leadEl   = document.getElementById('lead');
 const controls = document.getElementById('controls');
+
+const stepBadge = document.getElementById('step-badge'); //分岐点バッチ
+let stepCount = 0; 
+
+function updateStepBadge(){ //バッチカウント
+  if (!stepBadge) return;
+  if (stepCount <= 0){
+    stepBadge.style.display = 'none';
+    stepBadge.textContent = '';
+    return;
+  }
+  stepBadge.style.display = 'flex';
+  const base = 0x2460; // ①
+  if (stepCount >= 1 && stepCount <= 20){
+    stepBadge.textContent = String.fromCharCode(base + stepCount - 1);
+  } else {
+    stepBadge.textContent = String(stepCount);
+  }
+}
+
 
 let mode = 'explore'; // 'explore' | 'return'
 let history = [];     // 記録: {dir, idx, kind}
@@ -159,21 +177,6 @@ function chestPointsByFilename(name){
   return 0;             // なし
 }
 
-function updateStepBadge(){ //バッチカウント
-  if (!stepBadge) return;
-  if (stepCount <= 0){
-    stepBadge.style.display = 'none';
-    stepBadge.textContent = '';
-    return;
-  }
-  stepBadge.style.display = 'flex';
-  const base = 0x2460; // ①
-  if (stepCount >= 1 && stepCount <= 20){
-    stepBadge.textContent = String.fromCharCode(base + stepCount - 1);
-  } else {
-    stepBadge.textContent = String(stepCount);
-  }
-}
 
 // --- 進む処理 ----------------------------------------------
 function showRandomSceneAndScore(){
@@ -196,6 +199,9 @@ function showRandomSceneAndScore(){
 
 // --- 帰り道モード ------------------------------------------
 function startReturnMode() {
+   // ★ 帰路に入るのでバッジリセット
+  stepCount = 0;
+  updateStepBadge();
 
   // 一度も進んでいない → 入口なので即ゴール
   if (history.length === 0) {
