@@ -38,6 +38,8 @@ let timeLeft = 60;
 const scoreEl  = document.getElementById('score');
 const secEl    = document.getElementById('sec');
 const sceneEl  = document.getElementById('scene');
+const stepBadge = document.getElementById('step-badge'); //分岐点バッチ
+let stepCount = 0; 
 const leadEl   = document.getElementById('lead');
 const controls = document.getElementById('controls');
 
@@ -157,9 +159,27 @@ function chestPointsByFilename(name){
   return 0;             // なし
 }
 
+function updateStepBadge(){ //バッチカウント
+  if (!stepBadge) return;
+  if (stepCount <= 0){
+    stepBadge.style.display = 'none';
+    stepBadge.textContent = '';
+    return;
+  }
+  stepBadge.style.display = 'flex';
+  const base = 0x2460; // ①
+  if (stepCount >= 1 && stepCount <= 20){
+    stepBadge.textContent = String.fromCharCode(base + stepCount - 1);
+  } else {
+    stepBadge.textContent = String(stepCount);
+  }
+}
+
 // --- 進む処理 ----------------------------------------------
 function showRandomSceneAndScore(){
   if(timeLeft<=0 || mode!=='explore') return;
+  stepCount++;        // 分岐ごとにカウント
+  updateStepBadge();  // 表示更新 
   const pick = randomScene();
   setScene(pick.file);
   history.push(pick.meta);
