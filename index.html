@@ -26,10 +26,16 @@
       <a class="btn" href="./game.html">入る！</a>
     </div>
 
-    <!-- 👑 ランキングを開くボタン -->
-    <button id="ranking-toggle" class="ranking-toggle" type="button" aria-expanded="false">
-      <span class="icon">👑</span><span>ランキングを見る</span>
-    </button>
+    <!-- 👑ランキング & 📖遊び方 -->
+    <div class="top-links">
+      <button id="ranking-toggle" class="ranking-toggle" type="button" aria-expanded="false">
+        <span class="icon">👑</span><span>ランキングを見る</span>
+      </button>
+
+      <a class="howto-link" href="./asobikata.html">
+        <span class="icon">📖</span><span>遊び方</span>
+      </a>
+    </div>
 
     <!-- ▼ ランキング表示エリア ▼ -->
     <div class="ranking" id="ranking-panel">
@@ -62,30 +68,26 @@
     const app = initializeApp(firebaseConfig);
     const db  = getDatabase(app);
 
-   async function loadRanking() {
-  const snapshot = await get(ref(db, "ranking"));
+    async function loadRanking() {
+      const snapshot = await get(ref(db, "ranking"));
+      // まず生データをオブジェクトとして取得
+      const data = snapshot.val();
+      // データが無ければ空配列
+      if (!data) return [];
+      // push ID を無視して value だけ配列化
+      const list = Object.values(data);
+      // デバッグ用（ちゃんと10件取れているか確認）
+      console.log("ranking raw list:", list);
 
-  // まず生データをオブジェクトとして取得
-  const data = snapshot.val();
+      // score 降順, 同点は time 昇順
+      list.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.time - b.time;
+      });
 
-  // データが無ければ空配列
-  if (!data) return [];
-
-  // push ID を無視して value だけ配列化
-  const list = Object.values(data);
-
-  // デバッグ用（ちゃんと10件取れているか確認）
-  console.log("ranking raw list:", list);
-
-  // score 降順, 同点は time 昇順
-  list.sort((a, b) => {
-    if (b.score !== a.score) return b.score - a.score;
-    return a.time - b.time;
-  });
-
-  // 上位10件だけ返す
-  return list.slice(0, 10);
-}
+      // 上位10件だけ返す
+      return list.slice(0, 10);
+    }
 
 
     const panel     = document.getElementById("ranking-panel");
@@ -102,7 +104,7 @@
     loadRanking()
       .then(rank => {
         if (!ol) return;
-
+        ol.innerHTML = ""; // ★再描画時も崩れないようにクリア
         if (rank.length === 0) {
           ol.innerHTML = "<li>まだ記録がありません</li>";
           return;
