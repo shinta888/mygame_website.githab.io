@@ -166,9 +166,35 @@ header {
   list-style: none;
 }
 
+/* 👑📖の横並び */
+.top-links{
+  margin-top: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.howto-link{
+  text-decoration: none;
+  font: inherit;
+  color: #4a46a8;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.howto-link:hover{
+  text-decoration: underline;
+}
+
+
 .ranking li {
   line-height: 1.6;
 }
+
 
 
 
