@@ -145,7 +145,7 @@ header {
 /* ランキングパネル本体 */
 .ranking {
   display: none;              /* 最初は非表示 */
-  margin-top: 16px;
+  margin-top: 14px;
   font-size: 14px;
   color: #333;
   text-align: left;
@@ -166,15 +166,36 @@ header {
   list-style: none;
 }
 
-/* 👑📖の横並び */
-.top-links{
-  margin-top: 24px;
+/* 👑📖 の並び（ズレないように同じ部品に統一） */
+.sub-links{
+  margin-top: 22px;
   display: flex;
-  gap: 16px;
-  align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: center;   /* ← ここがズレ解消の肝 */
+  gap: 20px;
   flex-wrap: wrap;
 }
+
+/* button と a を同じ見た目にする */
+.link-btn{
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: #4a46a8;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;        /* ← ここもズレ解消 */
+  text-decoration: none; /* a 用 */
+}
+
+.link-btn .icon{
+  font-size: 18px;
+  transform: translateY(-1px); /* ちょい上げて見た目揃え */
+}
+
 
 .howto-link{
   text-decoration: none;
@@ -190,10 +211,20 @@ header {
   text-decoration: underline;
 }
 
+.howto-img{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius: 10px;
+  background:#eee;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
+
 
 .ranking li {
   line-height: 1.6;
 }
+
 
 
 
