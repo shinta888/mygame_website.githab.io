@@ -409,7 +409,7 @@ function showReadyScreen(){
   const player = versusOrder[versus.turn] ?? "先行";
   document.body.innerHTML = `
     <main class="frame" style="text-align:center">
-      <h2>次は ${player} プレイヤー</h2>
+      <h2> ${player} プレイヤーの番です</h2>
       <p>先行：${versus.score["先行"]} / 後行：${versus.score["後行"]}</p>
       <button class="btn" id="start-round">準備OK！入る！</button>
       <div class="row" style="margin-top:16px">
