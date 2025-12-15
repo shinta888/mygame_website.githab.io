@@ -369,10 +369,10 @@ function finishGame(){
 
   if (gameMode === "versus"){
     const player = versusOrder[versusTurn];
-    versusScore[player] += score;
-    versusTurn++;
+    versus.Score[player] += score;
+    versus.Turn++;
 
-    if (versusTurn < 4){
+    if (versus.Turn < 4){
       showReadyScreen();
     } else {
       showVersusResult();
@@ -407,10 +407,13 @@ function clearVersusState(){
 // ================== 対戦準備画面 ==================
 function showReadyScreen(){
   const player = versusOrder[versus.turn] ?? "先行";
+  const isFirst = player === "先行";
+  const playerClass = isFirst ? "player-first" : "player-second";
   document.body.innerHTML = `
     <main class="frame" style="text-align:center">
       <h2> ${player} プレイヤーの番です</h2>
-      <p>先行：${versus.score["先行"]} / 後行：${versus.score["後行"]}</p>
+      <p><span class="player-first">先行：${versus.score["先行"]} 
+      / <span class="player-second">後行：${versus.score["後行"]}</p>
       <button class="btn" id="start-round">準備OK！入る！</button>
       <div class="row" style="margin-top:16px">
         <a class="btn" href="./index.html">やめる</a>
@@ -431,7 +434,7 @@ function showVersusResult(){
   document.body.innerHTML = `
     <main class="frame" style="text-align:center">
       <h1>結果</h1>
-      <p>先行：${a} / 後行：${b}</p>
+      <p><span style="color:red">先行：${a} / <span style="color:blue">後行：${b}</p>
       <h2>${win}</h2>
       <a class="btn" href="./index.html">戻る</a>
     </main>
