@@ -226,6 +226,16 @@ header {
   line-height: 1.6;
 }
 
+.player-first {
+  color: #e53935; /* 赤 */
+  font-weight: 700;
+}
+
+.player-second {
+  color: #1e88e5; /* 青 */
+  font-weight: 700;
+}
+
 
 
 
