@@ -24,10 +24,12 @@ const db  = getDatabase(app);
 // ================== モード判定 ==================
 const params = new URLSearchParams(location.search);
 const gameMode = params.get("mode") || "solo";
+const phase    = params.get("phase") || "play";
 
 // ================== 対戦用管理 ==================
 let versusTurn = 0;
 const versusOrder = ["先行", "後行", "先行", "後行"];
+let versus = loadVersusState(); // {turn, score}
 const versusScore = { "先行": 0, "後行": 0 };
 
 // ランキングにスコアを追加
@@ -135,13 +137,7 @@ function renderExploreControls(){
   controls.append(go, back);
   go.addEventListener('click', showRandomSceneAndScore);
   // ★ここが重要：対戦なら finishGame を呼ぶ
-  back.addEventListener('click', () => {
-    if (gameMode === "versus") {
-      finishGame();        // ← 対戦用の区切りへ
-    } else {
-      startReturnMode();   // ← 1人用は従来通り帰路クイズへ
-    }
-  });
+  back.addEventListener('click', startReturnMode);
 }
 
 function renderReturnControls(kind, correct){
@@ -289,7 +285,7 @@ function showGoalThenResult(){
   controls.innerHTML='';
   setTimeout(()=> {
     if (gameMode === "versus") {
-      finishGame();     // ★対戦はここで区切る
+      roundFinish(score);     // ★対戦はここで区切る
     } else {
       showResult(score); // ★1人用は従来通り
     }
@@ -300,8 +296,33 @@ function showLostThenGameOver(){
   leadEl.textContent = '迷った！！';
   setScene('images/mayotta.jpeg');
   controls.innerHTML='';
-  setTimeout(()=> showGameOver(0), 3000);
+  setTimeout(()=> {
+    if (gameMode === "versus") {
+      roundFinish(0);        // ★失敗は0点持ち帰り扱い
+    } else {
+      showGameOver(0);
+    }
+  }, 3000);
 }
+
+function roundFinish(got){
+  // 今の手番の人へ加算
+  const player = versusOrder[versus.turn];
+  versus.score[player] += got;
+  versus.turn += 1;
+
+  saveVersusState(versus);
+
+  if (versus.turn < 4){
+    // 次の準備へ
+    location.href = "./game.html?mode=versus&phase=ready";
+  } else {
+    // 結果
+    showVersusResult();
+    clearVersusState();
+  }
+}
+
 
 function showResult(finalScore){
   let name = null;
@@ -363,15 +384,45 @@ function finishGame(){
   showSoloResult();
 }
 
+const VKEY = "mayo_versus_state";
+
+function loadVersusState(){
+  try{
+    const raw = sessionStorage.getItem(VKEY);
+    if (!raw) {
+      return { turn: 0, score: { "先行": 0, "後行": 0 } };
+    }
+    return JSON.parse(raw);
+  }catch{
+    return { turn: 0, score: { "先行": 0, "後行": 0 } };
+  }
+}
+
+function saveVersusState(state){
+  sessionStorage.setItem(VKEY, JSON.stringify(state));
+}
+
+function clearVersusState(){
+  sessionStorage.removeItem(VKEY);
+}
+
+
 // ================== 対戦準備画面 ==================
 function showReadyScreen(){
+  const player = versusOrder[versus.turn] ?? "先行";
   document.body.innerHTML = `
     <main class="frame" style="text-align:center">
-      <h2>次は ${versusOrder[versusTurn]} プレイヤー</h2>
-      <p>先行：${versusScore["先行"]} / 後行：${versusScore["後行"]}</p>
-      <button class="btn" onclick="location.reload()">入る！</button>
+      <h2>次は ${player} プレイヤー</h2>
+      <p>先行：${versus.score["先行"]} / 後行：${versus.score["後行"]}</p>
+      <button class="btn" id="start-round">準備OK！入る！</button>
+      <div class="row" style="margin-top:16px">
+        <a class="btn" href="./index.html">やめる</a>
+      </div>
     </main>
   `;
+  document.getElementById("start-round").addEventListener("click", () => {
+    location.href = "./game.html?mode=versus&phase=play";
+  });
 }
 
 // ================== 対戦結果 ==================
@@ -388,6 +439,13 @@ function showVersusResult(){
       <a class="btn" href="./index.html">戻る</a>
     </main>
   `;
+}
+
+// ================== 最初の準備フェーズ判定 ==================
+if (gameMode === "versus" && phase === "ready") {
+  showReadyScreen();   // 準備画面を表示
+  throw new Error("Ready phase stop"); 
+  // ↑ これより下のゲーム初期化を止めるため
 }
 
 // --- 初期化 ------------------------------------------------
