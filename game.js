@@ -21,6 +21,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
+// ================== モード判定 ==================
+const params = new URLSearchParams(location.search);
+const gameMode = params.get("mode") || "solo";
+
+// ================== 対戦用管理 ==================
+let versusTurn = 0;
+const versusOrder = ["先行", "後行", "先行", "後行"];
+const versusScore = { "先行": 0, "後行": 0 };
+
 // ランキングにスコアを追加
 async function saveScoreToServer(name, score){
   const rankRef = ref(db, "ranking");
@@ -320,6 +329,52 @@ function showGameOver(finalScore){
         <a class="btn" href="./index.html">戻る</a>
       </div>
     </main>`;
+}
+
+function finishGame(){
+  clearInterval(timer);
+
+  if (gameMode === "versus"){
+    const player = versusOrder[versusTurn];
+    versusScore[player] += score;
+    versusTurn++;
+
+    if (versusTurn < 4){
+      showReadyScreen();
+    } else {
+      showVersusResult();
+    }
+    return;
+  }
+
+  showSoloResult();
+}
+
+// ================== 対戦準備画面 ==================
+function showReadyScreen(){
+  document.body.innerHTML = `
+    <main class="frame" style="text-align:center">
+      <h2>次は ${versusOrder[versusTurn]} プレイヤー</h2>
+      <p>先行：${versusScore["先行"]} / 後行：${versusScore["後行"]}</p>
+      <button class="btn" onclick="location.reload()">入る！</button>
+    </main>
+  `;
+}
+
+// ================== 対戦結果 ==================
+function showVersusResult(){
+  const a = versusScore["先行"];
+  const b = versusScore["後行"];
+  const win = a > b ? "先行の勝ち！" : a < b ? "後行の勝ち！" : "引き分け！";
+
+  document.body.innerHTML = `
+    <main class="frame" style="text-align:center">
+      <h1>結果</h1>
+      <p>先行：${a} / 後行：${b}</p>
+      <h2>${win}</h2>
+      <a class="btn" href="./index.html">戻る</a>
+    </main>
+  `;
 }
 
 // --- 初期化 ------------------------------------------------
