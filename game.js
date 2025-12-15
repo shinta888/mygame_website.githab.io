@@ -27,10 +27,9 @@ const gameMode = params.get("mode") || "solo";
 const phase    = params.get("phase") || "play";
 
 // ================== 対戦用管理 ==================
-let versusTurn = 0;
+const VKEY = "mayo_versus_state";
 const versusOrder = ["先行", "後行", "先行", "後行"];
 let versus = loadVersusState(); // {turn, score}
-const versusScore = { "先行": 0, "後行": 0 };
 
 // ランキングにスコアを追加
 async function saveScoreToServer(name, score){
@@ -384,8 +383,6 @@ function finishGame(){
   showSoloResult();
 }
 
-const VKEY = "mayo_versus_state";
-
 function loadVersusState(){
   try{
     const raw = sessionStorage.getItem(VKEY);
@@ -427,8 +424,8 @@ function showReadyScreen(){
 
 // ================== 対戦結果 ==================
 function showVersusResult(){
-  const a = versusScore["先行"];
-  const b = versusScore["後行"];
+  const a = versus.Score["先行"];
+  const b = versus.Score["後行"];
   const win = a > b ? "先行の勝ち！" : a < b ? "後行の勝ち！" : "引き分け！";
 
   document.body.innerHTML = `
@@ -441,13 +438,9 @@ function showVersusResult(){
   `;
 }
 
-// ================== 最初の準備フェーズ判定 ==================
 if (gameMode === "versus" && phase === "ready") {
-  showReadyScreen();   // 準備画面を表示
-  throw new Error("Ready phase stop"); 
-  // ↑ これより下のゲーム初期化を止めるため
+  showReadyScreen();
+} else {
+  renderExploreControls();
+  showRandomSceneAndScore();
 }
-
-// --- 初期化 ------------------------------------------------
-renderExploreControls();
-showRandomSceneAndScore();
