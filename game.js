@@ -134,7 +134,14 @@ function renderExploreControls(){
   back.textContent='いや、引き返す';
   controls.append(go, back);
   go.addEventListener('click', showRandomSceneAndScore);
-  back.addEventListener('click', startReturnMode);
+  // ★ここが重要：対戦なら finishGame を呼ぶ
+  back.addEventListener('click', () => {
+    if (gameMode === "versus") {
+      finishGame();        // ← 対戦用の区切りへ
+    } else {
+      startReturnMode();   // ← 1人用は従来通り帰路クイズへ
+    }
+  });
 }
 
 function renderReturnControls(kind, correct){
@@ -280,7 +287,13 @@ function showGoalThenResult(){
   leadEl.textContent = '出口だ！！';
   setScene('images/goal.jpeg');
   controls.innerHTML='';
-  setTimeout(()=> showResult(score), 3000);
+  setTimeout(()=> {
+    if (gameMode === "versus") {
+      finishGame();     // ★対戦はここで区切る
+    } else {
+      showResult(score); // ★1人用は従来通り
+    }
+  }, 3000);
 }
 
 function showLostThenGameOver(){
