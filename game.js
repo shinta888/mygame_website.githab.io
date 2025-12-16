@@ -406,10 +406,33 @@ function clearVersusState(){
 // ================== 対戦準備画面 ==================
 function showReadyScreen(){
   const player = versusOrder[versus.turn] ?? "先行";
+  const isFirstTurn = versus.turn === 0;
+
+  // ★ 最初だけ説明文を出す
+  const introText = isFirstTurn ? `
+    <div style="margin-bottom:24px; line-height:1.8; color:#444;">
+      <p><strong><span class="player-first">先行</span>・<span class="player-second">後行</span>を決めてください</strong></p>
+      <p>
+        <span class="player-first">先行</span> → <span class="player-second">後行</span> → <span class="player-first">先行</span> → <span class="player-second">後行</span> → 結果発表<br>
+        この順でゲームを行います。
+      </p>
+      <p>
+        合計点数が高いプレイヤーの勝利です。
+      </p>
+      <hr style="margin:20px auto; max-width:300px;">
+    </div>
+  ` : "";
 
   document.body.innerHTML = `
     <main class="frame" style="text-align:center">
-      <h2><span class="${player === "先行" ? "player-first" : "player-second"}">${player}</span> プレイヤーの番です</h2>
+      ${introText}
+
+      <h2>
+        <span class="${player === "先行" ? "player-first" : "player-second"}">
+          ${player}
+        </span>
+        プレイヤーの番です
+      </h2>
 
       <p>
         <span class="player-first">先行：${versus.score["先行"]}</span>
