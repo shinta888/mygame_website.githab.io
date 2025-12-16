@@ -318,7 +318,6 @@ function roundFinish(got){
   } else {
     // 結果
     showVersusResult();
-    clearVersusState();
   }
 }
 
@@ -407,38 +406,51 @@ function clearVersusState(){
 // ================== 対戦準備画面 ==================
 function showReadyScreen(){
   const player = versusOrder[versus.turn] ?? "先行";
-  const isFirst = player === "先行";
-  const playerClass = isFirst ? "player-first" : "player-second";
+
   document.body.innerHTML = `
     <main class="frame" style="text-align:center">
-      <h2> ${player} プレイヤーの番です</h2>
-      <p><span class="player-first">先行：${versus.score["先行"]} 
-      / <span class="player-second">後行：${versus.score["後行"]}</p>
+      <h2><span class="${player === "先行" ? "player-first" : "player-second"}">${player}</span> プレイヤーの番です</h2>
+
+      <p>
+        <span class="player-first">先行：${versus.score["先行"]}</span>
+        <span style="color:#222"> / </span>
+        <span class="player-second">後行：${versus.score["後行"]}</span>
+      </p>
+
       <button class="btn" id="start-round">準備OK！入る！</button>
+
       <div class="row" style="margin-top:16px">
         <a class="btn" href="./index.html">やめる</a>
       </div>
     </main>
   `;
+
   document.getElementById("start-round").addEventListener("click", () => {
     location.href = "./game.html?mode=versus&phase=play";
   });
 }
 
+
 // ================== 対戦結果 ==================
 function showVersusResult(){
-  const a = versus.Score["先行"];
-  const b = versus.Score["後行"];
+  const a = versus.score["先行"];
+  const b = versus.score["後行"];
   const win = a > b ? "先行の勝ち！" : a < b ? "後行の勝ち！" : "引き分け！";
 
   document.body.innerHTML = `
     <main class="frame" style="text-align:center">
       <h1>結果</h1>
-      <p><span style="color:red">先行：${a} / <span style="color:blue">後行：${b}</p>
+      <p><span style="color:red">先行：${a} 
+      <span style="color:#222">/ 
+      <span style="color:blue">後行：${b}</p>
       <h2>${win}</h2>
       <a class="btn" href="./index.html">戻る</a>
     </main>
   `;
+  // 戻る時に状態を消す（安全）
+  document.getElementById("backHome").addEventListener("click", () => {
+    clearVersusState();
+  });
 }
 
 if (gameMode === "versus" && phase === "ready") {
