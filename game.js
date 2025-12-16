@@ -435,23 +435,37 @@ function showReadyScreen(){
 function showVersusResult(){
   const a = versus.score["先行"];
   const b = versus.score["後行"];
-  const win = a > b ? "先行の勝ち！" : a < b ? "後行の勝ち！" : "引き分け！";
+
+  let resultHtml = "";
+  if (a > b) {
+    resultHtml = `<span class="player-first">先行</span>プレイヤーの勝ち！`;
+  } else if (a < b) {
+    resultHtml = `<span class="player-second">後行</span>プレイヤーの勝ち！`;
+  } else {
+    resultHtml = "引き分け！";
+  }
 
   document.body.innerHTML = `
     <main class="frame" style="text-align:center">
       <h1>結果</h1>
-      <p><span style="color:red">先行：${a} 
-      <span style="color:#222">/ 
-      <span style="color:blue">後行：${b}</p>
-      <h2>${win}</h2>
-      <a class="btn" href="./index.html">戻る</a>
+
+      <p>
+        <span class="player-first">先行：${a}</span>
+        <span style="color:#222"> / </span>
+        <span class="player-second">後行：${b}</span>
+      </p>
+
+      <h2>${resultHtml}</h2>
+
+      <a class="btn" id="backHome" href="./index.html">戻る</a>
     </main>
   `;
-  // 戻る時に状態を消す（安全）
+
   document.getElementById("backHome").addEventListener("click", () => {
     clearVersusState();
   });
 }
+
 
 if (gameMode === "versus" && phase === "ready") {
   showReadyScreen();
